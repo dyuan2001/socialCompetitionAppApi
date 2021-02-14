@@ -48,22 +48,22 @@ app.post('/api/userpost-post', (req, res) => {
     postUserpost(req, res, db);
 });
 
-// GET COMMENT 
+// GET USERPOST 
 app.get('/api/userpost-get/:userpost_id', (req, res) => {
     getUserpost(req, res, db);
 });
 
-// SCAN COMMENTS
+// SCAN USERPOSTS
 app.get('/api/userpost-scan', (req, res) => {
     scanUserposts(req, res, db);
 });
 
-// UPDATE COMMENT
+// UPDATE USERPOST
 app.put('/api/userpost-update/:userpost_id', (req, res) => {
     updateUserpost(req, res, db);
 });
 
-// DELETE COMMENT
+// DELETE USERPOST
 app.delete('/api/userpost-delete/:userpost_id', (req, res) => {
     deleteUserpost(req, res, db);
 });
@@ -129,29 +129,29 @@ app.post('/api/reply-post', (req, res) => {
     postReply(req, res, db);
 });
 
-// GET COMMENT 
+// GET REPLY 
 app.get('/api/reply-get/:comment_id', (req, res) => {
     getReply(req, res, db)
 });
 
-// SCAN COMMENTS
+// SCAN REPLIES
 app.get('/api/reply-scan', (req, res) => {
     scanReplies(req, res, db);
 });
 
-// UPDATE COMMENT
+// UPDATE REPLY
 app.put('/api/reply-update/:reply_id', (req, res) => {
     updateReply(req, res, db);
 });
 
-// DELETE COMMENT
+// DELETE REPLY
 app.delete('/api/reply-delete/:reply_id', (req, res) => {
     deleteReply(req, res, db);
 });
 
 // USERS
 
-
+const {postUser, getUser, scanUsers, updateUser, deleteUser, addFriend, removeFriend, addTag, removeTag, addChallenge, incrementPoints} = require('./src/users.js');
 
 /*
 JSON Format:
@@ -159,11 +159,65 @@ JSON Format:
     "id": String - autoscaled (?),
     "points": integer - social competition points,
     "tags": Str arr - array of the user's tags,
-    "text": String - actual reply text,
-    "reactions": integer - likes (could be expanded to an array if more types of reactions),
+    "friends": Str arr - array of the user's friends' ids,
+    "userposts": int arr - array of the user's userposts' ids,
+    "challenges": int arr - array of the user's completed challenges,
 }
-
-NOTE: Write function to update parent comment with reply
 */
+
+// POST USER
+app.post('/api/user-post', (req, res) => {
+    postUser(req, res, db);
+});
+
+// GET USER 
+app.get('/api/user-get/:user_id', (req, res) => {
+    getUser(req, res, db)
+});
+
+// SCAN USERS
+app.get('/api/user-scan', (req, res) => {
+    scanUsers(req, res, db);
+});
+
+// UPDATE USER
+app.put('/api/user-update/:user_id', (req, res) => {
+    updateUser(req, res, db);
+});
+
+// DELETE USER
+app.delete('/api/user-delete/:user_id', (req, res) => {
+    deleteUser(req, res, db);
+});
+
+// ADD FRIEND
+app.put('/api/user-add-friend/:user_id/:friend_id', (req, res) => {
+    addFriend(req, res, db);
+});
+
+// REMOVE FRIEND
+app.put('/api/user-remove-friend/:user_id/:friend_id', (req, res) => {
+    removeFriend(req, res, db);
+});
+
+// ADD TAG
+app.put('/api/user-add-tag/:user_id/:tag', (req, res) => {
+    addTag(req, res, db);
+});
+
+// REMOVE TAG
+app.put('/api/user-remove-tag/:user_id/:tag', (req, res) => {
+    removeTag(req, res, db);
+});
+
+// ADD CHALLENGE
+app.put('/api/user-add-challenge/:user_id/:challenge_id', (req, res) => {
+    addChallenge(req, res, db);
+});
+
+// INCREMENT POINTS
+app.put('/api/user-increment-points/:user_id/:points', (req, res) => {
+    incrementPoints(req, res, db);
+});
 
 exports.app = functions.https.onRequest(app);

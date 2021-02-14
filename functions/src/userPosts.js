@@ -12,7 +12,7 @@ module.exports = {
                     userpostPhotoUrl: body.userpostPhotoUrl,
                     tags: body.tags,
                     reactions: body.reactions,
-                    comments: body.comments,
+                    comments: body.comments
                 });
             return res.status(200).send();
         } catch (error) {
@@ -46,7 +46,7 @@ module.exports = {
                     userpostPhotoUrl: doc.data().userpostPhotoUrl,
                     tags: doc.data().tags,
                     reactions: doc.data().reactions,
-                    comments: doc.data().comments,
+                    comments: doc.data().comments
                 };
                 response.push(selectedItem);
             }
@@ -69,7 +69,7 @@ module.exports = {
                 userpostPhotoUrl: body.userpostPhotoUrl,
                 tags: body.tags,
                 reactions: body.reactions,
-                comments: body.comments,
+                comments: body.comments
             });
             return res.status(200).send();
         } catch (error) {

@@ -12,7 +12,7 @@ module.exports = {
                     userid: body.userid,
                     text: body.text,
                     reactions: body.reactions,
-                    replies: body.replies,
+                    replies: body.replies
                 });
             return res.status(200).send();
         } catch (error) {
@@ -46,7 +46,7 @@ module.exports = {
                     userid: doc.data().userid,
                     text: doc.data().text,
                     reactions: doc.data().reactions,
-                    replies: doc.data().replies,
+                    replies: doc.data().replies
                 };
                 response.push(selectedItem);
             }
@@ -69,7 +69,7 @@ module.exports = {
                 userid: body.userid,
                 text: body.text,
                 reactions: body.reactions,
-                replies: body.replies,
+                replies: body.replies
             });
             return res.status(200).send();
         } catch (error) {

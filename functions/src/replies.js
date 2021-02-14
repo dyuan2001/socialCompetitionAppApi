@@ -11,7 +11,7 @@ module.exports = {
                     commentId: body.commentId,
                     userid: body.userid,
                     text: body.text,
-                    reactions: body.reactions,
+                    reactions: body.reactions
                 });
             return res.status(200).send();
         } catch (error) {
@@ -44,7 +44,7 @@ module.exports = {
                     commentId: doc.data().commentId,
                     userid: doc.data().userid,
                     text: doc.data().text,
-                    reactions: doc.data().reactions,
+                    reactions: doc.data().reactions
                 };
                 response.push(selectedItem);
             }
@@ -65,7 +65,7 @@ module.exports = {
                 commentId: body.commentId,
                 userid: body.userid,
                 text: body.text,
-                reactions: body.reactions,
+                reactions: body.reactions
             });
             return res.status(200).send();
         } catch (error) {
