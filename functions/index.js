@@ -24,25 +24,47 @@ const db = admin.firestore();
 
 // BEGINNING OF FUNCTIONS
 
-app.get('/hello-world', (req, res) => {
-  return res.status(200).send('Hello World!');
+// app.get('/hello-world', (req, res) => {
+//   return res.status(200).send('Hello World!');
+// });
+
+//COMMENTS
+
+const {getComment, postComment, scanComments, updateComment, deleteComment} = require('./src/comments.js');
+
+/* POST COMMENT
+JSON Format:
+{
+    "id": integer - autoscaled (?),
+    "parent": integer - parent post,
+    "userid": integer - user's id,
+    "text": string - actual comment text,
+    "reactions": integer - likes (could be expanded to an array if more types of reactions),
+    "replies": int array - ids of replies
+}
+*/
+app.post('/api/comment-post', (req, res) => {
+    postComment(req, res, db);
 });
 
-// create
-app.post('/api/create', (req, res) => {
-    (async () => {
-        const body = JSON.parse(req.body);
+// GET COMMENT 
+app.get('/api/comment-read/:comment_id', (req, res) => {
+    getComment(req, res, db)
+});
 
-        console.log('id parsed', body.id);
-        try {
-          await db.collection('comments').doc('/' + body.id + '/')
-              .create({item: body.item});
-          return res.status(200).send();
-        } catch (error) {
-          console.log(error);
-          return res.status(500).send(error);
-        }
-      })();
-  });
+// SCAN COMMENTS
+app.get('/api/read', (req, res) => {
+    scanComments(req, res, db);
+});
+
+// UPDATE COMMENT
+app.put('/api/update/:comment_id', (req, res) => {
+    updateComment(req, res, db);
+});
+
+// DELETE COMMENT
+app.delete('/api/delete/:comment_id', (req, res) => {
+    deleteComment(req, res, db);
+});
 
 exports.app = functions.https.onRequest(app);
