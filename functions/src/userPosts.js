@@ -2,17 +2,17 @@ const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 
 module.exports = {
-    postComment: async (req, res, db) => {
+    postUserpost: async (req, res, db) => {
         const body = JSON.parse(req.body);
 
         try {
-            await db.collection('comments').doc('/' + body.id + '/')
+            await db.collection('userposts').doc('/' + body.id + '/')
                 .create({
-                    userpostId: body.userpostId,
                     userid: body.userid,
-                    text: body.text,
+                    userpostPhotoUrl: body.userpostPhotoUrl,
+                    tags: body.tags,
                     reactions: body.reactions,
-                    replies: body.replies,
+                    comments: body.comments,
                 });
             return res.status(200).send();
         } catch (error) {
@@ -21,9 +21,9 @@ module.exports = {
         }
     },
 
-    getComment: async (req, res, db) => {
+    getUserpost: async (req, res, db) => {
         try {
-            const document = db.collection('comments').doc(req.params.comment_id);
+            const document = db.collection('userposts').doc(req.params.userpost_id);
             let item = await document.get();
             let response = item.data();
             return res.status(200).send(response);
@@ -33,20 +33,20 @@ module.exports = {
         }
     },
 
-    scanComments: async (req, res, db) => {
+    scanUserposts: async (req, res, db) => {
         try {
-            let query = db.collection('comments');
+            let query = db.collection('userposts');
             let response = [];
             await query.get().then(querySnapshot => {
             let docs = querySnapshot.docs;
             for (let doc of docs) {
                 const selectedItem = {
                     id: doc.id,
-                    userpostId: doc.data().userpostId,
                     userid: doc.data().userid,
-                    text: doc.data().text,
+                    userpostPhotoUrl: doc.data().userpostPhotoUrl,
+                    tags: doc.data().tags,
                     reactions: doc.data().reactions,
-                    replies: doc.data().replies,
+                    comments: doc.data().comments,
                 };
                 response.push(selectedItem);
             }
@@ -58,18 +58,18 @@ module.exports = {
         }
     },
 
-    updateComment: async (req, res, db) => {
+    updateUserpost: async (req, res, db) => {
         const body = JSON.parse(req.body);
 
         try {
-            const document = db.collection('comments').doc(req.params.comment_id);
+            const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
                 id: body.id,
-                userpostId: body.userpostId,
                 userid: body.userid,
-                text: body.text,
+                userpostPhotoUrl: body.userpostPhotoUrl,
+                tags: body.tags,
                 reactions: body.reactions,
-                replies: body.replies,
+                comments: body.comments,
             });
             return res.status(200).send();
         } catch (error) {
@@ -78,9 +78,9 @@ module.exports = {
         }
     },
 
-    deleteComment: async (req, res, db) => {
+    deleteUserpost: async (req, res, db) => {
         try {
-            const document = db.collection('comments').doc(req.params.comment_id);
+            const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.delete();
             return res.status(200).send();
         } catch (error) {
