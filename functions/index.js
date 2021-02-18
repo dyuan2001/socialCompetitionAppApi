@@ -223,39 +223,44 @@ app.put('/api/user-increment-points/:user_id/:points', (req, res) => {
     incrementPoints(req, res, db);
 });
 
-// CHALLENGE INFO
-const {getInfo, postChallenge} = require('./src/challengeInfo.js');
+// CHALLENGES
+const {getChallenge, postChallenge, removeChallenge} = require('./src/challenges.js');
 
 // POST CHALLENGE
-app.put('/api/post-challenge/:user_id/:challenge_info', (req, res) => {
+app.post('/api/challenges', (req, res) => {
     postChallenge(req, res, db);
 });
 
-// GET CHALLENGE INFO
-app.get('/api/get-info/:user_id/:challenge_info', (req, res) => {
-    getInfo(req, res, db);
+// GET CHALLENGE 
+app.get('/api/challenges', (req, res) => {
+    getChallenge(req, res, db);
+});
+
+// REMOVE CHALLENGE 
+app.delete('/api/challenges/:challenge_id', (req, res) => {
+    removeChallenge(req, res, db);
 });
 
 // MILESTONES
-const {setMilestone, editMilestone, removeMilestone, getMilestone} = require('./src/milestones.js');
+const {postMilestone, editMilestone, deleteMilestone, getMilestone} = require('./src/milestones.js');
 
 // SET MILESTONE
-app.put('/api/set-milestone/:user_id/:milestones', (req, res) => {
-    setMilestone(req, res, db);
+app.post('/api/milestones', (req, res) => {
+    postMilestone(req, res, db);
 });
 
 // EDIT MILESTONE
-app.put('/api/edit-milestone/:user_id/:milestones', (req, res) => {
+app.put('/api/milestones/:milestone_id', (req, res) => {
     editMilestone(req, res, db);
 });
 
-// REMOVE MILESTONE
-app.put('/api/remove-milestone/:user_id/:milestones', (req, res) => {
-    removeMilestone(req, res, db);
+// DELETE MILESTONE
+app.put('/api/milestones/:milestone_id', (req, res) => {
+    deleteMilestone(req, res, db);
 });
 
 // GET MILESTONE
-app.get('/api/get-milestone/:user_id/:milestones', (req, res) => {
+app.get('/api/milestones', (req, res) => {
     getMilestone(req, res, db);
 });
 
