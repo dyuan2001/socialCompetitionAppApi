@@ -8,7 +8,7 @@ const functions = require("firebase-functions");
 //   response.send("Hello from Firebase!");
 // });
 
-// test from Aritro -- will remove this line later
+
 
 const admin = require('firebase-admin');
 const express = require('express');
