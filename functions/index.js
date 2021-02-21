@@ -8,17 +8,17 @@ const functions = require("firebase-functions");
 //   response.send("Hello from Firebase!");
 // });
 
-const admin = require('firebase-admin');
-const express = require('express');
-const cors = require('cors');
+const admin = require("firebase-admin");
+const express = require("express");
+const cors = require("cors");
 const app = express();
-app.use(cors({ origin: true }));
+app.use(cors({origin: true}));
 
 // Service account
-var serviceAccount = require("./permissions.json");
+const serviceAccount = require("./permissions.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://socialcompetitionapp..firebaseio.com"
+  databaseURL: "https://socialcompetitionapp..firebaseio.com",
 });
 const db = admin.firestore();
 
@@ -30,7 +30,7 @@ const db = admin.firestore();
 
 // USERPOSTS
 
-const {postUserpost, getUserpost, scanUserposts, updateUserpost, deleteUserpost} = require('./src/userPosts.js');
+const {postUserpost, getUserpost, scanUserposts, updateUserpost, deleteUserpost} = require("./src/userPosts.js");
 
 /*
 JSON Format:
@@ -44,33 +44,33 @@ JSON Format:
 }
 */
 
-app.post('/api/userpost-post', (req, res) => {
-    postUserpost(req, res, db);
+app.post("/api/userpost-post", (req, res) => {
+  postUserpost(req, res, db);
 });
 
-// GET USERPOST 
-app.get('/api/userpost-get/:userpost_id', (req, res) => {
-    getUserpost(req, res, db);
+// GET USERPOST
+app.get("/api/userpost-get/:userpost_id", (req, res) => {
+  getUserpost(req, res, db);
 });
 
 // SCAN USERPOSTS
-app.get('/api/userpost-scan', (req, res) => {
-    scanUserposts(req, res, db);
+app.get("/api/userpost-scan", (req, res) => {
+  scanUserposts(req, res, db);
 });
 
 // UPDATE USERPOST
-app.put('/api/userpost-update/:userpost_id', (req, res) => {
-    updateUserpost(req, res, db);
+app.put("/api/userpost-update/:userpost_id", (req, res) => {
+  updateUserpost(req, res, db);
 });
 
 // DELETE USERPOST
-app.delete('/api/userpost-delete/:userpost_id', (req, res) => {
-    deleteUserpost(req, res, db);
+app.delete("/api/userpost-delete/:userpost_id", (req, res) => {
+  deleteUserpost(req, res, db);
 });
 
 // COMMENTS
 
-const {getComment, postComment, scanComments, updateComment, deleteComment} = require('./src/comments.js');
+const {getComment, postComment, scanComments, updateComment, deleteComment} = require("./src/comments.js");
 
 /*
 JSON Format:
@@ -85,33 +85,33 @@ JSON Format:
 
 NOTE: Write function to update parent userPost with comment
 */
-app.post('/api/comment-post', (req, res) => {
-    postComment(req, res, db);
+app.post("/api/comment-post", (req, res) => {
+  postComment(req, res, db);
 });
 
-// GET COMMENT 
-app.get('/api/comment-get/:comment_id', (req, res) => {
-    getComment(req, res, db)
+// GET COMMENT
+app.get("/api/comment-get/:comment_id", (req, res) => {
+  getComment(req, res, db);
 });
 
 // SCAN COMMENTS
-app.get('/api/comment-scan', (req, res) => {
-    scanComments(req, res, db);
+app.get("/api/comment-scan", (req, res) => {
+  scanComments(req, res, db);
 });
 
 // UPDATE COMMENT
-app.put('/api/comment-update/:comment_id', (req, res) => {
-    updateComment(req, res, db);
+app.put("/api/comment-update/:comment_id", (req, res) => {
+  updateComment(req, res, db);
 });
 
 // DELETE COMMENT
-app.delete('/api/comment-delete/:comment_id', (req, res) => {
-    deleteComment(req, res, db);
+app.delete("/api/comment-delete/:comment_id", (req, res) => {
+  deleteComment(req, res, db);
 });
 
 // REPLIES
 
-const {postReply, getReply, scanReplies, updateReply, deleteReply} = require('./src/replies.js');
+const {postReply, getReply, scanReplies, updateReply, deleteReply} = require("./src/replies.js");
 
 /*
 JSON Format:
@@ -125,33 +125,33 @@ JSON Format:
 
 NOTE: Write function to update parent comment with reply
 */
-app.post('/api/reply-post', (req, res) => {
-    postReply(req, res, db);
+app.post("/api/reply-post", (req, res) => {
+  postReply(req, res, db);
 });
 
-// GET REPLY 
-app.get('/api/reply-get/:comment_id', (req, res) => {
-    getReply(req, res, db)
+// GET REPLY
+app.get("/api/reply-get/:comment_id", (req, res) => {
+  getReply(req, res, db);
 });
 
 // SCAN REPLIES
-app.get('/api/reply-scan', (req, res) => {
-    scanReplies(req, res, db);
+app.get("/api/reply-scan", (req, res) => {
+  scanReplies(req, res, db);
 });
 
 // UPDATE REPLY
-app.put('/api/reply-update/:reply_id', (req, res) => {
-    updateReply(req, res, db);
+app.put("/api/reply-update/:reply_id", (req, res) => {
+  updateReply(req, res, db);
 });
 
 // DELETE REPLY
-app.delete('/api/reply-delete/:reply_id', (req, res) => {
-    deleteReply(req, res, db);
+app.delete("/api/reply-delete/:reply_id", (req, res) => {
+  deleteReply(req, res, db);
 });
 
 // USERS
 
-const {postUser, getUser, scanUsers, updateUser, deleteUser, addFriend, removeFriend, addTag, removeTag, addChallenge, incrementPoints} = require('./src/users.js');
+const {postUser, getUser, scanUsers, updateUser, deleteUser, addFriend, removeFriend, addTag, removeTag, addChallenge, incrementPoints} = require("./src/users.js");
 
 /*
 JSON Format:
@@ -166,58 +166,58 @@ JSON Format:
 */
 
 // POST USER
-app.post('/api/user-post', (req, res) => {
-    postUser(req, res, db);
+app.post("/api/user-post", (req, res) => {
+  postUser(req, res, db);
 });
 
-// GET USER 
-app.get('/api/user-get/:user_id', (req, res) => {
-    getUser(req, res, db)
+// GET USER
+app.get("/api/user-get/:user_id", (req, res) => {
+  getUser(req, res, db);
 });
 
 // SCAN USERS
-app.get('/api/user-scan', (req, res) => {
-    scanUsers(req, res, db);
+app.get("/api/user-scan", (req, res) => {
+  scanUsers(req, res, db);
 });
 
 // UPDATE USER
-app.put('/api/user-update/:user_id', (req, res) => {
-    updateUser(req, res, db);
+app.put("/api/user-update/:user_id", (req, res) => {
+  updateUser(req, res, db);
 });
 
 // DELETE USER
-app.delete('/api/user-delete/:user_id', (req, res) => {
-    deleteUser(req, res, db);
+app.delete("/api/user-delete/:user_id", (req, res) => {
+  deleteUser(req, res, db);
 });
 
 // ADD FRIEND
-app.put('/api/user-add-friend/:user_id/:friend_id', (req, res) => {
-    addFriend(req, res, db);
+app.put("/api/user-add-friend/:user_id/:friend_id", (req, res) => {
+  addFriend(req, res, db);
 });
 
 // REMOVE FRIEND
-app.put('/api/user-remove-friend/:user_id/:friend_id', (req, res) => {
-    removeFriend(req, res, db);
+app.put("/api/user-remove-friend/:user_id/:friend_id", (req, res) => {
+  removeFriend(req, res, db);
 });
 
 // ADD TAG
-app.put('/api/user-add-tag/:user_id/:tag', (req, res) => {
-    addTag(req, res, db);
+app.put("/api/user-add-tag/:user_id/:tag", (req, res) => {
+  addTag(req, res, db);
 });
 
 // REMOVE TAG
-app.put('/api/user-remove-tag/:user_id/:tag', (req, res) => {
-    removeTag(req, res, db);
+app.put("/api/user-remove-tag/:user_id/:tag", (req, res) => {
+  removeTag(req, res, db);
 });
 
 // ADD CHALLENGE
-app.put('/api/user-add-challenge/:user_id/:challenge_id', (req, res) => {
-    addChallenge(req, res, db);
+app.put("/api/user-add-challenge/:user_id/:challenge_id", (req, res) => {
+  addChallenge(req, res, db);
 });
 
 // INCREMENT POINTS
-app.put('/api/user-increment-points/:user_id/:points', (req, res) => {
-    incrementPoints(req, res, db);
+app.put("/api/user-increment-points/:user_id/:points", (req, res) => {
+  incrementPoints(req, res, db);
 });
 
 exports.app = functions.https.onRequest(app);
