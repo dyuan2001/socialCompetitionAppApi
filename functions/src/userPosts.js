@@ -1,6 +1,9 @@
 const functions = require("firebase-functions");
 const admin = require('firebase-admin');
 
+const {updateMilestoneProgress, postMilestone} = require('./milestones.js');
+const {getUser} = require('./users.js');
+
 module.exports = {
     postUserpost: async (req, res, db) => {
         const body = JSON.parse(req.body);
@@ -14,6 +17,24 @@ module.exports = {
                     reactions: body.reactions,
                     comments: body.comments
                 });
+            
+            userInfo = await fetch(`https://us-central1-socialcompetitionapp.cloudfunctions.net/app/api/user-get/${body.userid}`);
+            body.tags.forEach(tag => {
+                let milestoneInfo = fetch(`https://us-central1-socialcompetitionapp.cloudfunctions.net/app/api/milestone-get/${userid}-${tag}`);
+                if (milestoneInfo == null) {
+                    postMilestone({
+                        id: `${userid}-${tag}`,
+                        userid: body.userid,
+                        tag: tag,
+                        heading: `${tag} - Bronze`,
+                        text: `Milestone for reaching Bronze achievement in ${tag}.`,
+                        progress: 1,
+                    }, db);
+                } else {
+                    updateMilestoneProgress(`${userid}-${tag}`, db);
+                }
+            });
+
             return res.status(200).send();
         } catch (error) {
             console.log(error);

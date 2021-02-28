@@ -193,6 +193,7 @@ JSON Format:
     "friends": Str arr - array of the user's friends' ids,
     "userposts": int arr - array of the user's userposts' ids,
     "challenges": int arr - array of the user's completed challenges,
+    "milestones": int arr - array of the user's milestones,
 }
 */
 
@@ -282,22 +283,22 @@ const {
 } = require("./src/milestones.js");
 
 // SET MILESTONE
-app.post("/api/milestones", (req, res) => {
+app.post("/api/milestones-post/", (req, res) => {
   postMilestone(req, res, db);
 });
 
 // EDIT MILESTONE
-app.put("/api/milestones/:milestone_id", (req, res) => {
+app.put("/api/milestones-edit/:milestone_id", (req, res) => {
   editMilestone(req, res, db);
 });
 
 // DELETE MILESTONE
-app.put("/api/milestones/:milestone_id", (req, res) => {
+app.put("/api/milestones-delete/:milestone_id", (req, res) => {
   deleteMilestone(req, res, db);
 });
 
 // GET MILESTONE
-app.get("/api/milestones", (req, res) => {
+app.get("/api/milestones-get/:milestone_id", (req, res) => {
   getMilestone(req, res, db);
 });
 

@@ -11,7 +11,8 @@ module.exports = {
                     tags: body.tags,
                     friends: body.friends,
                     userposts: body.userposts,
-                    challenges: body.challenges
+                    challenges: body.challenges,
+                    milestones: body.milestones
                 });
             return res.status(200).send();
         } catch (error) {
@@ -45,7 +46,8 @@ module.exports = {
                     tags: doc.data().tags,
                     friends: doc.data().friends,
                     userposts: doc.data().userposts,
-                    challenges: doc.data().challenges
+                    challenges: doc.data().challenges,
+                    milestones: doc.data().milestones
                 };
                 response.push(selectedItem);
             }
@@ -67,7 +69,8 @@ module.exports = {
                 tags: body.tags,
                 friends: body.friends,
                 userposts: body.userposts,
-                challenges: body.challenges
+                challenges: body.challenges,
+                milestones: body.milestones
             });
             return res.status(200).send();
         } catch (error) {
@@ -162,6 +165,17 @@ module.exports = {
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
+        }
+    },
+
+    addMilestone: async (milestone_id, db) => {
+        try {
+            const document = db.collection('userInfo').doc(user_id);
+            await document.update({
+                milestones: firestore.FieldValue.arrayUnion(milestone_id),
+            });
+        } catch (error) {
+            console.log(error);
         }
     },
 }
