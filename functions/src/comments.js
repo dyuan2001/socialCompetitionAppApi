@@ -128,6 +128,19 @@ module.exports = {
         }
     },
 
+    removeCommentReaction: async (req, res, db) => { // NOT API
+        try {
+            const document = db.collection('comments').doc(req.params.comment_id);
+            await document.update({
+                reactions: firestore.FieldValue.increment(-1),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+
     scanUserpostComments: async (req, res, db) => {
         const body = JSON.parse(req.body);
 

@@ -108,6 +108,19 @@ module.exports = {
         }
     },
 
+    removeReplyReaction: async (req, res, db) => { // NOT API
+        try {
+            const document = db.collection('replies').doc(req.params.reply_id);
+            await document.update({
+                reactions: firestore.FieldValue.increment(-1),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+
     scanCommentReplies: async (req, res, db) => {
         const body = JSON.parse(req.body);
 
