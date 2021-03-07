@@ -5,8 +5,9 @@ module.exports = {
         const body = JSON.parse(req.body);
 
         try {
-            await db.collection('userInfo').doc('/' + body.id + '/')
-                .create({
+            await db.collection('userInfo')
+                .add({
+                    userInfoId: body.userInfoId,
                     points: body.points,
                     tags: body.tags,
                     friends: body.friends,
@@ -42,6 +43,7 @@ module.exports = {
             for (let doc of docs) {
                 const selectedItem = {
                     id: doc.id,
+                    userInfoId: doc.data().userInfoId,
                     points: doc.data().points,
                     tags: doc.data().tags,
                     friends: doc.data().friends,

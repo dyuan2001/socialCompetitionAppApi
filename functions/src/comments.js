@@ -1,5 +1,5 @@
 const functions = require("firebase-functions");
-const admin = require('firebase-admin');
+const {firestore} = require('firebase-admin');
 
 const {addComment} = require('./userposts.js');
 
@@ -7,8 +7,11 @@ module.exports = {
     postComment: async (req, res, db) => {
         const body = JSON.parse(req.body);
 
+        console.log(body);
+        console.log(body.userpostId);
+
         try {
-            await db.collection('comments').doc()
+            await db.collection('comments')
                 .add({
                     userpostId: body.userpostId,
                     userid: body.userid,
@@ -112,16 +115,16 @@ module.exports = {
         }
     },
 
-    addReaction: async (comment_id, db) => { // NOT API
+    addCommentReaction: async (req, res, db) => { // NOT API
         try {
-            const document = db.collection('comments').doc(comment_id);
+            const document = db.collection('comments').doc(req.params.comment_id);
             await document.update({
                 reactions: firestore.FieldValue.increment(1),
             });
-            return "Successful reaction addition!";
+            return res.status(200).send();
         } catch (error) {
             console.log(error);
-            return error;
+            return res.status(500).send(error);
         }
     },
 
