@@ -35,7 +35,8 @@ const {
     getUserpost, 
     scanUserposts, 
     updateUserpost, 
-    deleteUserpost
+    deleteUserpost,
+    scanUserUserposts,
 } = require("./src/userPosts.js");
 
 /*
@@ -74,6 +75,11 @@ app.delete("/api/userpost-delete/:userpost_id", (req, res) => {
   deleteUserpost(req, res, db);
 });
 
+// SCAN USER USERPOSTS
+app.get("/api/userpost-user-scan", (req, res) => {
+  scanUserUserposts(req, res, db);
+});
+
 // COMMENTS
 
 const {
@@ -81,7 +87,8 @@ const {
     postComment,
     scanComments, 
     updateComment, 
-    deleteComment
+    deleteComment,
+    scanUserpostComments,
 } = require("./src/comments.js");
 
 /*
@@ -121,6 +128,11 @@ app.delete("/api/comment-delete/:comment_id", (req, res) => {
   deleteComment(req, res, db);
 });
 
+// SCAN USERPOST COMMENTS
+app.get("/api/comment-userpost-scan", (req, res) => {
+  scanUserpostComments(req, res, db);
+});
+
 // REPLIES
 
 const {
@@ -128,7 +140,8 @@ const {
     getReply, 
     scanReplies, 
     updateReply, 
-    deleteReply
+    deleteReply,
+    scanCommentReplies,
 } = require("./src/replies.js");
 
 
@@ -166,6 +179,11 @@ app.put("/api/reply-update/:reply_id", (req, res) => {
 // DELETE REPLY
 app.delete("/api/reply-delete/:reply_id", (req, res) => {
   deleteReply(req, res, db);
+});
+
+// SCAN COMMENT REPLIES
+app.get("/api/userpost-user-scan", (req, res) => {
+  scanCommentReplies(req, res, db);
 });
 
 // USERS

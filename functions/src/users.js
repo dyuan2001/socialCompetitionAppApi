@@ -90,6 +90,19 @@ module.exports = {
         }
     },
 
+    addUserpost: async (userpost_id, user_id, db) => { // NOT API
+        try {
+            const document = db.collection('userInfo').doc(user_id);
+            await document.update({
+                userposts: firestore.FieldValue.arrayUnion(userpost_id),
+            });
+            return "Successful updating userposts!";
+        } catch (error) {
+            console.log(error);
+            return error;
+        }
+    },
+
     addFriend: async (req, res, db) => {
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
