@@ -250,7 +250,7 @@ JSON Format:
 */
 
 // POST USER
-app.post("/api/user-post", (req, res) => {
+app.post("/api/user-post/:uid", (req, res) => {
   postUser(req, res, db);
 });
 

@@ -5,9 +5,8 @@ module.exports = {
         const body = JSON.parse(req.body);
 
         try {
-            let docRef = await db.collection('userInfo')
-                .add({
-                    userInfoId: body.userInfoId,
+            await db.collection('userInfo').doc(req.params.uid)
+            .set({
                     points: body.points,
                     tags: body.tags,
                     friends: body.friends,
@@ -15,7 +14,7 @@ module.exports = {
                     challenges: body.challenges,
                     milestones: body.milestones
                 });
-            return res.status(200).json(docRef);
+            return res.status(200).send();
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
