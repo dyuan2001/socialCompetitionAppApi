@@ -77,7 +77,6 @@ module.exports = {
         try {
             const document = db.collection('comments').doc(req.params.comment_id);
             await document.update({
-                id: body.id,
                 userpostId: body.userpostId,
                 userid: body.userid,
                 text: body.text,
@@ -142,10 +141,8 @@ module.exports = {
     },
 
     scanUserpostComments: async (req, res, db) => {
-        const body = JSON.parse(req.body);
-
         try {
-            let query = db.collection('comments').where("userpostId", "==", body.userpost_id).orderBy("timestamp", "desc");
+            let query = db.collection('comments').where("userpostId", "==", req.params.userpost_id).orderBy("timestamp", "desc");
             let response = [];
             await query.get().then(querySnapshot => {
             let docs = querySnapshot.docs;

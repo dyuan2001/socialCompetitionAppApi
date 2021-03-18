@@ -122,10 +122,8 @@ module.exports = {
     },
 
     scanCommentReplies: async (req, res, db) => {
-        const body = JSON.parse(req.body);
-
         try {
-            let query = db.collection('replies').where("commentId", "==", body.commentId).orderBy("timestamp", "desc");
+            let query = db.collection('replies').where("commentId", "==", req.params.commentId).orderBy("timestamp", "desc");
             let response = [];
             await query.get().then(querySnapshot => {
             let docs = querySnapshot.docs;

@@ -8,11 +8,13 @@ module.exports = {
     postUserpost: async (req, res, db) => {
         const body = req.body;
 
+        let url = await getPhotoURL(body.uri);
+
         try {
             await db.collection('userposts')
                 .add({
                     userid: body.userid,
-                    userpostPhotoUrl: body.userpostPhotoUrl,
+                    userpostPhotoUrl: url,
                     tags: body.tags,
                     reactions: body.reactions,
                     comments: body.comments,
@@ -93,7 +95,6 @@ module.exports = {
         try {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
-                id: body.id,
                 userid: body.userid,
                 userpostPhotoUrl: body.userpostPhotoUrl,
                 tags: body.tags,
@@ -158,10 +159,8 @@ module.exports = {
     },
 
     scanUserUserposts: async (req, res, db) => {
-        const body = JSON.parse(req.body);
-
         try {
-            let query = db.collection('userposts').where("userid", "==", body.user_id).orderBy("timestamp", "desc");
+            let query = db.collection('userposts').where("userid", "==", req.params.user_id).orderBy("timestamp", "desc");
             let response = [];
             await query.get().then(querySnapshot => {
             let docs = querySnapshot.docs;
@@ -184,4 +183,48 @@ module.exports = {
             return res.status(500).send(error);
         }
     },
+
+    // uploadProfilePhoto: async (uri) => {
+    //     const uid = Firebase.getCurrentUser().uid;
+
+    //     try {
+    //         const photo = await Firebase.getBlob(uri);
+    //         const imageRef = firebase.storage().ref("profilePhotos").child(uid);
+    //         await imageRef.put(photo);
+    //         const url = await imageRef.getDownloadURL();
+
+    //         await db.collection("users").doc(uid).update({
+    //             profilePhotoUrl: url
+    //         });
+
+    //         return url;
+    //     } catch (error) {
+    //         console.log("Error @uploadProfilePhoto: ", error.message);
+    //     }
+    // },
+}
+
+async function getPhotoURL(uri) {
+    const photo = await getBlob(uri);
+    const imageRef = firebase.storage().ref("userpostPhotos").child(uid);
+    await imageRef.put(photo);
+    const url = await imageRef.getDownloadURL();
+    return url;
+}
+
+async function getBlob (uri) {
+    return await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.onload = () => {
+            resolve(xhr.response);
+        }
+        xhr.onerror = () => {
+            reject(new TypeError("Network request failed."));
+        }
+
+        xhr.responseType = "blob";
+        xhr.open("GET", uri, true);
+        xhr.send(null);
+    })
 }

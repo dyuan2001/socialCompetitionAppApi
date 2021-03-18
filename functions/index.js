@@ -44,7 +44,6 @@ const {
 /*
 JSON Format:
 {
-    "id": integer - autoscaled (?),
     "userid": String - user's id,
     "userpostPhotoUrl": String - userpost's photo,
     "tags": Str array - list of tags,
@@ -88,7 +87,7 @@ app.post("/api/userpost-remove-reaction/:userpost_id", (req, res) => {
 });
 
 // SCAN USER USERPOSTS
-app.get("/api/userpost-user-scan", (req, res) => {
+app.get("/api/userpost-user-scan/:user_id", (req, res) => {
   scanUserUserposts(req, res, db);
 });
 
@@ -108,7 +107,6 @@ const {
 /*
 JSON Format:
 {
-    "id": integer - autoscaled (?),
     "userpostId": integer - parent userpostId,
     "userid": String - user's id,
     "text": String - actual comment text,
@@ -153,7 +151,7 @@ app.post("/api/comment-remove-reaction/:comment_id", (req, res) => {
 });
 
 // SCAN USERPOST COMMENTS
-app.get("/api/comment-userpost-scan", (req, res) => {
+app.get("/api/comment-userpost-scan/:userpost_id", (req, res) => {
   scanUserpostComments(req, res, db);
 });
 
@@ -174,7 +172,6 @@ const {
 /*
 JSON Format:
 {
-    "id": integer - autoscaled (?),
     "commentId": integer - parent comment's id,
     "userid": String - user's id,
     "text": String - actual reply text,
@@ -218,7 +215,7 @@ app.post("/api/reply-remove-reaction/:reply_id", (req, res) => {
 });
 
 // SCAN COMMENT REPLIES
-app.get("/api/reply-comment-scan", (req, res) => {
+app.get("/api/reply-comment-scan/:comment_id", (req, res) => {
   scanCommentReplies(req, res, db);
 });
 
@@ -236,13 +233,13 @@ const {
     addTag, 
     removeTag, 
     addChallenge, 
+    addMilestone,
     incrementPoints
 } = require("./src/users.js");
 
 /*
 JSON Format:
 {
-    "id": String - autoscaled (?),
     "points": integer - social competition points,
     "tags": Str arr - array of the user's tags,
     "friends": Str arr - array of the user's friends' ids,
@@ -302,6 +299,11 @@ app.put("/api/user-add-challenge/:user_id/:challenge_id", (req, res) => {
   addChallenge(req, res, db);
 });
 
+// ADD MILESTONE
+app.put("/api/user-add-milestone/:user_id/:milestone_id", (req, res) => {
+  addMilestone(req, res, db);
+});
+
 // INCREMENT POINTS
 app.put("/api/user-increment-points/:user_id/:points", (req, res) => {
   incrementPoints(req, res, db);
@@ -315,17 +317,17 @@ const {
 } = require("./src/challenges.js");
 
 // POST CHALLENGE
-app.post("/api/challenges", (req, res) => {
+app.post("/api/challenges-post", (req, res) => {
   postChallenge(req, res, db);
 });
 
 // GET CHALLENGE
-app.get("/api/challenges", (req, res) => {
+app.get("/api/challenges-get", (req, res) => {
   getChallenge(req, res, db);
 });
 
 // REMOVE CHALLENGE
-app.delete("/api/challenges/:challenge_id", (req, res) => {
+app.delete("/api/challenges-remove/:challenge_id", (req, res) => {
   removeChallenge(req, res, db);
 });
 
@@ -334,7 +336,8 @@ const {
     postMilestone, 
     editMilestone, 
     deleteMilestone, 
-    getMilestone
+    getMilestone,
+    updateMilestoneProgress
 } = require("./src/milestones.js");
 
 // SET MILESTONE
@@ -357,5 +360,9 @@ app.get("/api/milestones-get/:milestone_id", (req, res) => {
   getMilestone(req, res, db);
 });
 
+// UPDATE MILESTONE PROGRESS
+app.put("/api/milestones-progress/:milestone_id", (req, res) => {
+  updateMilestoneProgress(req, res, db);
+});
 
 exports.app = functions.https.onRequest(app);

@@ -5,7 +5,7 @@ module.exports = {
         const body = JSON.parse(req.body);
 
         try {
-            await db.collection('userInfo')
+            let docRef = await db.collection('userInfo')
                 .add({
                     userInfoId: body.userInfoId,
                     points: body.points,
@@ -15,7 +15,7 @@ module.exports = {
                     challenges: body.challenges,
                     milestones: body.milestones
                 });
-            return res.status(200).send();
+            return res.status(200).json(docRef);
         } catch (error) {
             console.log(error);
             return res.status(500).send(error);
@@ -183,11 +183,11 @@ module.exports = {
         }
     },
 
-    addMilestone: async (milestone_id, db) => {
+    addMilestone: async (req, res, db) => {
         try {
-            const document = db.collection('userInfo').doc(user_id);
+            const document = db.collection('userInfo').doc(req.params.user_id);
             await document.update({
-                milestones: firestore.FieldValue.arrayUnion(milestone_id),
+                milestones: firestore.FieldValue.arrayUnion(req.params.milestone_id),
             });
         } catch (error) {
             console.log(error);
