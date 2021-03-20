@@ -1,7 +1,7 @@
 const functions = require("firebase-functions");
 const {firestore} = require('firebase-admin');
 
-const {addComment} = require('./userposts.js');
+const {addComment} = require('./userPosts.js');
 
 module.exports = {
     postComment: async (req, res, db) => {

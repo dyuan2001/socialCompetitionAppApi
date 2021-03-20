@@ -7,6 +7,7 @@ module.exports = {
         try {
             await db.collection('userInfo').doc(req.params.uid)
             .set({
+                    username: body.username,
                     points: body.points,
                     tags: body.tags,
                     friends: body.friends,
@@ -42,6 +43,7 @@ module.exports = {
             for (let doc of docs) {
                 const selectedItem = {
                     id: doc.id,
+                    username: doc.data().username,
                     userInfoId: doc.data().userInfoId,
                     points: doc.data().points,
                     tags: doc.data().tags,
@@ -66,6 +68,7 @@ module.exports = {
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
             await document.update({
+                username: body.username,
                 points: body.points,
                 tags: body.tags,
                 friends: body.friends,

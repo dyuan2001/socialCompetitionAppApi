@@ -16,7 +16,7 @@ module.exports = {
                     progress: body.progress,
                 });
 
-            addMilestone(body.id, userid, db);
+            // addMilestone(body.id, userid, db);
 
             return res.status(200).send();
         } catch (error) {

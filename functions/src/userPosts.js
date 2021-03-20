@@ -1,7 +1,6 @@
 const functions = require("firebase-functions");
 const {firestore} = require('firebase-admin');
 
-const {updateMilestoneProgress, postMilestone} = require('./milestones.js');
 const {getUser, addUserpost} = require('./users.js');
 
 module.exports = {
