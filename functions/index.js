@@ -39,6 +39,10 @@ const {
     scanUserUserposts,
     addUserpostReaction,
     removeUserpostReaction,
+    addUserpostTag,
+    removeUserpostTag,
+    addUserpostReactionUser,
+    removeUserpostReactionUser
 } = require("./src/userPosts.js");
 
 /*
@@ -84,6 +88,26 @@ app.post("/api/userpost-add-reaction/:userpost_id", (req, res) => {
 // USERPOST REMOVE REACTION
 app.post("/api/userpost-remove-reaction/:userpost_id", (req, res) => {
   removeUserpostReaction(req, res, db);
+});
+
+// USERPOST ADD TAG
+app.post("/api/userpost-add-tag/:userpost_id/:tag", (req, res) => {
+  addUserpostTag(req, res, db);
+});
+
+// USERPOST REMOVE TAG
+app.post("/api/userpost-remove-tag/:userpost_id/:tag", (req, res) => {
+  removeUserpostTag(req, res, db);
+});
+
+// USERPOST ADD REACTIONUSER
+app.post("/api/userpost-add-reactionuser/:userpost_id/:reaction_userid", (req, res) => {
+  addUserpostReactionUser(req, res, db);
+});
+
+// USERPOST REMOVE REACTIONUSER
+app.post("/api/userpost-remove-reactionuser/:userpost_id/:reaction_userid", (req, res) => {
+  removeUserpostReactionUser(req, res, db);
 });
 
 // SCAN USER USERPOSTS

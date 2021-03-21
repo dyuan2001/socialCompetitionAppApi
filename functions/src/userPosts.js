@@ -1,5 +1,6 @@
 const functions = require("firebase-functions");
 const {firestore} = require('firebase-admin');
+const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const {getUser, addUserpost} = require('./users.js');
 
@@ -7,16 +8,17 @@ module.exports = {
     postUserpost: async (req, res, db) => {
         const body = req.body;
 
-        let url = await getPhotoURL(body.uri);
+        // let url = await getPhotoURL(body.uri, body.userid);
 
         try {
             await db.collection('userposts')
                 .add({
                     userid: body.userid,
-                    userpostPhotoUrl: url,
+                    userpostPhotoUrl: body.userpostPhotoUrl,
                     tags: body.tags,
                     reactions: body.reactions,
                     comments: body.comments,
+                    reactionUsers: body.reactionUsers,
                     timestamp: Date.now()
                 })
                 .then((docRef) => {
@@ -76,6 +78,7 @@ module.exports = {
                     tags: doc.data().tags,
                     reactions: doc.data().reactions,
                     comments: doc.data().comments,
+                    reactionUsers: doc.data().reactionUsers,
                     timestamp: doc.data().timestamp,
                 };
                 response.push(selectedItem);
@@ -98,7 +101,8 @@ module.exports = {
                 userpostPhotoUrl: body.userpostPhotoUrl,
                 tags: body.tags,
                 reactions: body.reactions,
-                comments: body.comments
+                comments: body.comments,
+                reactionUsers: body.reactionUsers
             });
             return res.status(200).send();
         } catch (error) {
@@ -171,6 +175,7 @@ module.exports = {
                     tags: doc.data().tags,
                     reactions: doc.data().reactions,
                     comments: doc.data().comments,
+                    reactionUsers: doc.data().reactionUsers,
                     timestamp: doc.data().timestamp,
                 };
                 response.push(selectedItem);
@@ -183,47 +188,80 @@ module.exports = {
         }
     },
 
-    // uploadProfilePhoto: async (uri) => {
-    //     const uid = Firebase.getCurrentUser().uid;
-
-    //     try {
-    //         const photo = await Firebase.getBlob(uri);
-    //         const imageRef = firebase.storage().ref("profilePhotos").child(uid);
-    //         await imageRef.put(photo);
-    //         const url = await imageRef.getDownloadURL();
-
-    //         await db.collection("users").doc(uid).update({
-    //             profilePhotoUrl: url
-    //         });
-
-    //         return url;
-    //     } catch (error) {
-    //         console.log("Error @uploadProfilePhoto: ", error.message);
-    //     }
-    // },
-}
-
-async function getPhotoURL(uri) {
-    const photo = await getBlob(uri);
-    const imageRef = firebase.storage().ref("userpostPhotos").child(uid);
-    await imageRef.put(photo);
-    const url = await imageRef.getDownloadURL();
-    return url;
-}
-
-async function getBlob (uri) {
-    return await new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.onload = () => {
-            resolve(xhr.response);
+    addUserpostTag: async (req, res, db) => {
+        try {
+            const document = db.collection('userposts').doc(req.params.userpost_id);
+            await document.update({
+                tags: firestore.FieldValue.arrayUnion(req.params.tag),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
         }
-        xhr.onerror = () => {
-            reject(new TypeError("Network request failed."));
-        }
+    },
 
-        xhr.responseType = "blob";
-        xhr.open("GET", uri, true);
-        xhr.send(null);
-    })
+    removeUserpostTag: async (req, res, db) => {
+        try {
+            const document = db.collection('userposts').doc(req.params.userpost_id);
+            await document.update({
+                tags: firestore.FieldValue.arrayRemove(req.params.tag),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+
+    addUserpostReactionUser: async (req, res, db) => {
+        try {
+            const document = db.collection('userposts').doc(req.params.userpost_id);
+            await document.update({
+                reactionUsers: firestore.FieldValue.arrayUnion(req.params.reaction_userid),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+
+    removeUserpostReactionUser: async (req, res, db) => {
+        try {
+            const document = db.collection('userposts').doc(req.params.userpost_id);
+            await document.update({
+                reactionUsers: firestore.FieldValue.arrayRemove(req.params.reaction_userid),
+            });
+            return res.status(200).send();
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
 }
+
+// async function getPhotoURL(uri, userid) {
+//     const photo = await getBlob(uri);
+//     const imageRef = firebase.storage().ref("userpostPhotos").child(Date.now() + userid);
+//     await imageRef.put(photo);
+//     const url = await imageRef.getDownloadURL();
+//     return url;
+// }
+
+// async function getBlob (uri) {
+//     return await new Promise((resolve, reject) => {
+//         const xhr = new XMLHttpRequest();
+
+//         xhr.onload = () => {
+//             resolve(xhr.response);
+//         }
+//         xhr.onerror = () => {
+//             reject(new TypeError("Network request failed."));
+//         }
+
+//         xhr.responseType = "blob";
+//         xhr.open("GET", uri, true);
+//         xhr.send(null);
+//     })
+// }
