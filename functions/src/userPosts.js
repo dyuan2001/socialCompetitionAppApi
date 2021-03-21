@@ -14,8 +14,12 @@ module.exports = {
             await db.collection('userposts')
                 .add({
                     userid: body.userid,
+                    username: body.username,
                     userpostPhotoUrl: body.userpostPhotoUrl,
-                    tags: body.tags,
+                    caption: body.caption,
+                    link: body.link,
+                    cause: body.cause,
+                    tag: body.tag,
                     reactions: body.reactions,
                     comments: body.comments,
                     reactionUsers: body.reactionUsers,
@@ -74,8 +78,12 @@ module.exports = {
                 const selectedItem = {
                     id: doc.id,
                     userid: doc.data().userid,
+                    username: doc.data().username,
                     userpostPhotoUrl: doc.data().userpostPhotoUrl,
-                    tags: doc.data().tags,
+                    caption: doc.data().caption,
+                    link: doc.data().link,
+                    cause: doc.data().cause,
+                    tag: doc.data().tag,
                     reactions: doc.data().reactions,
                     comments: doc.data().comments,
                     reactionUsers: doc.data().reactionUsers,
@@ -98,8 +106,12 @@ module.exports = {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
                 userid: body.userid,
+                username: body.username,
                 userpostPhotoUrl: body.userpostPhotoUrl,
-                tags: body.tags,
+                caption: body.caption,
+                link: body.link,
+                cause: body.cause,
+                tag: body.tag,
                 reactions: body.reactions,
                 comments: body.comments,
                 reactionUsers: body.reactionUsers
@@ -171,8 +183,12 @@ module.exports = {
                 const selectedItem = {
                     id: doc.id,
                     userid: doc.data().userid,
+                    username: doc.data().username,
                     userpostPhotoUrl: doc.data().userpostPhotoUrl,
-                    tags: doc.data().tags,
+                    caption: doc.data().caption,
+                    link: doc.data().link,
+                    cause: doc.data().cause,
+                    tag: doc.data().tag,
                     reactions: doc.data().reactions,
                     comments: doc.data().comments,
                     reactionUsers: doc.data().reactionUsers,
@@ -188,7 +204,7 @@ module.exports = {
         }
     },
 
-    addUserpostTag: async (req, res, db) => {
+    addUserpostTag: async (req, res, db) => { // OUTDATED. Don't use.
         try {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
@@ -201,7 +217,7 @@ module.exports = {
         }
     },
 
-    removeUserpostTag: async (req, res, db) => {
+    removeUserpostTag: async (req, res, db) => { // OUTDATED. Don't use.
         try {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({

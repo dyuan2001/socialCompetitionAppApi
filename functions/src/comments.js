@@ -15,6 +15,7 @@ module.exports = {
                 .add({
                     userpostId: body.userpostId,
                     userid: body.userid,
+                    username: body.username,
                     text: body.text,
                     reactions: body.reactions,
                     replies: body.replies,
@@ -57,6 +58,7 @@ module.exports = {
                     id: doc.id,
                     userpostId: doc.data().userpostId,
                     userid: doc.data().userid,
+                    username: doc.data().username,
                     text: doc.data().text,
                     reactions: doc.data().reactions,
                     replies: doc.data().replies
@@ -79,6 +81,7 @@ module.exports = {
             await document.update({
                 userpostId: body.userpostId,
                 userid: body.userid,
+                username: body.username,
                 text: body.text,
                 reactions: body.reactions,
                 replies: body.replies
@@ -151,6 +154,7 @@ module.exports = {
                     id: doc.id,
                     userpostId: doc.data().userpostId,
                     userid: doc.data().userid,
+                    username: doc.data().username,
                     text: doc.data().text,
                     reactions: doc.data().reactions,
                     replies: doc.data().replies,
