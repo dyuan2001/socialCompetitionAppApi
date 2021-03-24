@@ -361,7 +361,8 @@ const {
     editMilestone, 
     deleteMilestone, 
     getMilestone,
-    updateMilestoneProgress
+    updateMilestoneProgress,
+    refreshMilestone
 } = require("./src/milestones.js");
 
 // SET MILESTONE
@@ -385,8 +386,13 @@ app.get("/api/milestones-get/:milestone_id", (req, res) => {
 });
 
 // UPDATE MILESTONE PROGRESS
-app.put("/api/milestones-progress/:milestone_id", (req, res) => {
+app.put("/api/milestones-progress/", (req, res) => {
   updateMilestoneProgress(req, res, db);
+});
+
+// REFRESH MILESTONE
+app.delete("/api/milestones-refresh/:user_id/:milestone_id", (req, res) => {
+  refreshMilestone(req, res, db);
 });
 
 exports.app = functions.https.onRequest(app);

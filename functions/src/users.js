@@ -8,12 +8,12 @@ module.exports = {
             await db.collection('userInfo').doc(req.params.uid)
             .set({
                     username: body.username,
-                    points: body.points,
+                    points: body.points, // arr that gets added to
                     tags: body.tags,
                     friends: body.friends,
                     userposts: body.userposts,
                     challenges: body.challenges,
-                    milestones: body.milestones
+                    milestones: body.milestones,
                 });
             return res.status(200).send();
         } catch (error) {
@@ -136,8 +136,10 @@ module.exports = {
     addTag: async (req, res, db) => {
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
+            let pointsArray = [0, 0, 0, 0, 0];
             await document.update({
                 tags: firestore.FieldValue.arrayUnion(req.params.tag),
+                points: firestore.FieldValue.arrayUnion(pointsArray)
             });
             return res.status(200).send();
         } catch (error) {
@@ -160,10 +162,35 @@ module.exports = {
     },
 
     incrementPoints: async (req, res, db) => {
+        const body = JSON.parse(req.body);
+
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
+            let item = await document.get();
+            let userInfo = item.data();
+
+            // let milestones = userinfo.milestones;
+            // for (let i = 0; i < milestones.length; i++) {
+                
+            // }
+
+
+            let pointsMap = userInfo.points;
+
+            if (pointsMap[body.tag] == undefined) {
+                pointsMap[body.tag] = {
+                    "Thoughts": 0,
+                    "Volunteering": 0,
+                    "Activism": 0,
+                    "Contribution": 0,
+                    "Awareness": 0
+                }
+            }
+
+            pointsMap[body.tag][body.category] += parseInt(req.params.points, 10);
+
             await document.update({
-                points: firestore.FieldValue.increment(parseInt(req.params.points, 10)),
+                points: userInfo.points
             });
             return res.status(200).send();
         } catch (error) {
@@ -185,14 +212,74 @@ module.exports = {
         }
     },
 
-    addMilestone: async (req, res, db) => {
+    addMilestone: async (milestone_id, userid, db) => { // NOT API
         try {
-            const document = db.collection('userInfo').doc(req.params.user_id);
+            const document = db.collection('userInfo').doc(userid);
             await document.update({
-                milestones: firestore.FieldValue.arrayUnion(req.params.milestone_id),
+                milestones: firestore.FieldValue.arrayUnion(milestone_id),
             });
         } catch (error) {
             console.log(error);
         }
     },
+
+    removeMilestone: async (user_id, milestone_id, db) => { // NOT API
+        try {
+            const document = db.collection('userInfo').doc(user_id);
+            await document.update({
+                milestones: firestore.FieldValue.arrayRemove(milestone_id),
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    // addPoints: async (user_id, milestone_id, tag, category, numPoints, maxPoints, db) => { // NOT API
+    //     try {
+    //         const document = db.collection('userInfo').doc(user_id);
+    //         let item = await document.get();
+    //         let userInfo = item.data().json();
+
+    //         let makeNewChallenge = false;
+
+    //         // let index = null;
+    //         // for (let i = 0; i < userInfo.tags.length; i++) {
+    //         //     if (tag.localeCompare(userInfo.tags[index])) {
+    //         //         index = i;
+    //         //         break;
+    //         //     }
+    //         // }
+
+    //         let pointsMap = userInfo.points;
+    //         pointsMap[tag][category] += numPoints;
+
+    //         // if (index != null) {
+    //         //     let categoryIndex = 0; // Thoughts
+
+    //         //     if (category == "Volunteering") {
+    //         //         categoryIndex = 1;
+    //         //     } else if (category == "Activism") {
+    //         //         categoryIndex = 2;
+    //         //     } else if (category == "Contribution") {
+    //         //         categoryIndex = 3;
+    //         //     } else if (category == "Awareness") {
+    //         //         categoryIndex = 4;
+    //         //     }
+
+    //         //     userInfo.points[index][categoryIndex] += numPoints;
+
+    //         if (pointsMap[tag][category] >= maxPoints) {
+    //             module.exports.removeMilestone(user_id, milestone_id);
+    //             makeNewChallenge = true;
+    //         }
+
+    //         await document.update({
+    //             points: userInfo.points
+    //         });
+
+    //         return makeNewChallenge;
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 }
