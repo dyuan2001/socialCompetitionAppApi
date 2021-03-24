@@ -199,16 +199,16 @@ module.exports = {
         }
     },
 
-    addChallenge: async (req, res, db) => {
+    addChallenge: async (user_id, challenge_id, db) => {
         try {
-            const document = db.collection('userInfo').doc(req.params.user_id);
+            const document = db.collection('userInfo').doc(user_id);
             await document.update({
-                challenges: firestore.FieldValue.arrayUnion(req.params.challenge_id),
+                challenges: firestore.FieldValue.arrayUnion(challenge_id),
             });
-            return res.status(200).send();
+            return true;
         } catch (error) {
             console.log(error);
-            return res.status(500).send(error);
+            return false;
         }
     },
 

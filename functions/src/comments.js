@@ -148,20 +148,20 @@ module.exports = {
             let query = db.collection('comments').where("userpostId", "==", req.params.userpost_id).orderBy("timestamp", "desc");
             let response = [];
             await query.get().then(querySnapshot => {
-            let docs = querySnapshot.docs;
-            for (let doc of docs) {
-                const selectedItem = {
-                    id: doc.id,
-                    userpostId: doc.data().userpostId,
-                    userid: doc.data().userid,
-                    username: doc.data().username,
-                    text: doc.data().text,
-                    reactions: doc.data().reactions,
-                    replies: doc.data().replies,
-                    timestamp: doc.data().timestamp
-                };
-                response.push(selectedItem);
-            }
+                let docs = querySnapshot.docs;
+                for (let doc of docs) {
+                    const selectedItem = {
+                        id: doc.id,
+                        userpostId: doc.data().userpostId,
+                        userid: doc.data().userid,
+                        username: doc.data().username,
+                        text: doc.data().text,
+                        reactions: doc.data().reactions,
+                        replies: doc.data().replies,
+                        timestamp: doc.data().timestamp
+                    };
+                    response.push(selectedItem);
+                }
             });
             return res.status(200).send(response);
         } catch (error) {

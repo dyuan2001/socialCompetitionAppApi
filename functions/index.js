@@ -318,10 +318,10 @@ app.put("/api/user-remove-tag/:user_id/:tag", (req, res) => {
   removeTag(req, res, db);
 });
 
-// ADD CHALLENGE
-app.put("/api/user-add-challenge/:user_id/:challenge_id", (req, res) => {
-  addChallenge(req, res, db);
-});
+// // ADD CHALLENGE
+// app.put("/api/user-add-challenge/:user_id/:challenge_id", (req, res) => {
+//   addChallenge(req, res, db);
+// });
 
 // ADD MILESTONE
 app.put("/api/user-add-milestone/:user_id/:milestone_id", (req, res) => {
@@ -337,7 +337,8 @@ app.put("/api/user-increment-points/:user_id/:points", (req, res) => {
 const {
     getChallenge, 
     postChallenge, 
-    removeChallenge
+    removeChallenge,
+    updateChallengeProgress
 } = require("./src/challenges.js");
 
 // POST CHALLENGE
@@ -353,6 +354,11 @@ app.get("/api/challenges-get", (req, res) => {
 // REMOVE CHALLENGE
 app.delete("/api/challenges-remove/:challenge_id", (req, res) => {
   removeChallenge(req, res, db);
+});
+
+// UPDATE CHALLENGE PROGRESS
+app.put("/api/challenges-update-progress/:user_id/:points", (req, res) => {
+  updateChallengeProgress(req, res, db);
 });
 
 // MILESTONES

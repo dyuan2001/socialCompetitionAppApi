@@ -32,7 +32,7 @@ module.exports = {
 
     getMilestone: async (req, res, db) => {
         try {
-            const document = db.collection('milestones').doc(req.params.milestone);
+            const document = db.collection('milestones').doc(req.params.milestone_id);
             let item = await document.get();
             let response = item.data();
             return res.status(200).send(response);
