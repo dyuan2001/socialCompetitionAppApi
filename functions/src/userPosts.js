@@ -235,6 +235,7 @@ module.exports = {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
                 reactionUsers: firestore.FieldValue.arrayUnion(req.params.reaction_userid),
+                reactions: firestore.FieldValue.increment(1)
             });
             return res.status(200).send();
         } catch (error) {
@@ -248,6 +249,7 @@ module.exports = {
             const document = db.collection('userposts').doc(req.params.userpost_id);
             await document.update({
                 reactionUsers: firestore.FieldValue.arrayRemove(req.params.reaction_userid),
+                reactions: firestore.FieldValue.increment(-1)
             });
             return res.status(200).send();
         } catch (error) {
