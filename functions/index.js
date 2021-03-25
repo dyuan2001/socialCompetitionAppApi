@@ -336,6 +336,7 @@ app.put("/api/user-increment-points/:user_id/:points", (req, res) => {
 // CHALLENGES
 const {
     getChallenge, 
+    getCurrentChallenge,
     postChallenge, 
     removeChallenge,
     updateChallengeProgress
@@ -349,6 +350,11 @@ app.post("/api/challenges-post", (req, res) => {
 // GET CHALLENGE
 app.get("/api/challenges-get", (req, res) => {
   getChallenge(req, res, db);
+});
+
+// GET CURRENT CHALLENGE
+app.get("/api/challenges-get-current", (req, res) => {
+  getCurrentChallenge(req, res, db);
 });
 
 // REMOVE CHALLENGE

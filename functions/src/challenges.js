@@ -44,6 +44,20 @@ module.exports = {
         }
     },
 
+    getCurrentChallenge: async (req, res, db) => {
+        try {
+            let currChallenge = await module.exports.findCurrentChallenge(db);
+            let document = db.collection('challenges').doc(currChallenge);
+            let item = await document.get();
+            let response = item.data();
+            
+            return res.status(200).send(response);
+        } catch (error) {
+            console.log(error);
+            return res.status(500).send(error);
+        }
+    },
+
     deprecateChallenge: async (challenge_id, db) => {
         try {
             const document = db.collection('challenges').doc(challenge_id);
