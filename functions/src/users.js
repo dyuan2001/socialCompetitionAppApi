@@ -14,6 +14,7 @@ module.exports = {
                     userposts: body.userposts,
                     challenges: body.challenges,
                     milestones: body.milestones,
+                    profilePhotoUrl: body.profilePhotoUrl
                 });
             return res.status(200).send();
         } catch (error) {
@@ -50,7 +51,8 @@ module.exports = {
                     friends: doc.data().friends,
                     userposts: doc.data().userposts,
                     challenges: doc.data().challenges,
-                    milestones: doc.data().milestones
+                    milestones: doc.data().milestones,
+                    profilePhotoUrl: doc.data().profilePhotoUrl
                 };
                 response.push(selectedItem);
             }
@@ -74,7 +76,8 @@ module.exports = {
                 friends: body.friends,
                 userposts: body.userposts,
                 challenges: body.challenges,
-                milestones: body.milestones
+                milestones: body.milestones,
+                profilePhotoUrl: body.profilePhotoUrl
             });
             return res.status(200).send();
         } catch (error) {
@@ -136,10 +139,8 @@ module.exports = {
     addTag: async (req, res, db) => {
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
-            let pointsArray = [0, 0, 0, 0, 0];
             await document.update({
-                tags: firestore.FieldValue.arrayUnion(req.params.tag),
-                points: firestore.FieldValue.arrayUnion(pointsArray)
+                tags: firestore.FieldValue.arrayUnion(req.params.tag)
             });
             return res.status(200).send();
         } catch (error) {
@@ -152,7 +153,7 @@ module.exports = {
         try {
             const document = db.collection('userInfo').doc(req.params.user_id);
             await document.update({
-                tags: firestore.FieldValue.arrayUnion(req.params.tag),
+                tags: firestore.FieldValue.arrayRemove(req.params.tag),
             });
             return res.status(200).send();
         } catch (error) {
