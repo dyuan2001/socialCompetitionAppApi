@@ -3,10 +3,11 @@ const {firestore} = require('firebase-admin');
 const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const {getUser, addUserpost} = require('./users.js');
+const {addImpactFact} = require('./impactFacts.js');
 
 module.exports = {
     postUserpost: async (req, res, db) => {
-        const body = req.body;
+        const body = JSON.parse(req.body);
 
         // let url = await getPhotoURL(body.uri, body.userid);
 
@@ -140,6 +141,17 @@ module.exports = {
             await document.update({
                 comments: firestore.FieldValue.arrayUnion(comment_id),
             });
+
+            try {
+                let item = await document.get();
+                let response = item.data();
+                let user_id = response.userid;
+                let numComments = response.comments.length;
+                await addImpactFact(user_id, userpost_id, 'comment', numComments, null, null, db);
+            } catch (error) {
+                console.log(error);
+            }
+
             return "Successful updating comments!";
         } catch (error) {
             console.log(error);
@@ -237,6 +249,17 @@ module.exports = {
                 reactionUsers: firestore.FieldValue.arrayUnion(req.params.reaction_userid),
                 reactions: firestore.FieldValue.increment(1)
             });
+
+            try {
+                let item = await document.get();
+                let response = item.data();
+                let user_id = response.userid;
+                let reactions = response.reactions;
+                await addImpactFact(user_id, req.params.userpost_id, 'reaction', reactions, null, null, db);
+            } catch (error) {
+                console.log(error);
+            }
+
             return res.status(200).send();
         } catch (error) {
             console.log(error);

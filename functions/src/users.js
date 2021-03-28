@@ -1,4 +1,5 @@
 const {firestore} = require('firebase-admin')
+const {addImpactFact} = require('./impactFacts.js');
 
 module.exports = {
     postUser: async (req, res, db) => {
@@ -189,7 +190,13 @@ module.exports = {
             }
 
             pointsMap[body.tag][body.category] += parseInt(req.params.points, 10);
-
+            
+            try {
+                 addImpactFact(req.params.user_id, null, 'category', pointsMap[body.tag][body.category], body.tag, body.category, db);
+            } catch (error) {
+                console.log(error);
+            }
+            
             await document.update({
                 points: userInfo.points
             });

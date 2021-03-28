@@ -407,4 +407,20 @@ app.delete("/api/milestones-refresh/:user_id/:milestone_id", (req, res) => {
   refreshMilestone(req, res, db);
 });
 
+// IMPACT FACTS
+const {
+  getUpcomingFacts,
+  clearUpcomingFacts
+} = require('./src/impactFacts.js');
+
+// GET UPCOMING FACTS
+app.get("/api/impact-facts-get/:user_id", (req, res) => {
+  getUpcomingFacts(req, res, db);
+});
+
+// CLEAR UPCOMING FACTS
+app.delete("/api/impact-facts-clear/:user_id", (req, res) => {
+  clearUpcomingFacts(req, res, db);
+});
+
 exports.app = functions.https.onRequest(app);
