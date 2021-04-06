@@ -24,6 +24,10 @@ module.exports = {
                                 title: 'We\'ve missed you!',
                                 body: 'You\'ve been inactive for a while. Let\'s continue creating change with Solu!',
                             });
+                            await db.collection('users').doc(doc.data().id)
+                            .update({
+                                lastActive: Date.now()
+                            })
                         }
                     }
                 }
