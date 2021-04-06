@@ -1,6 +1,8 @@
 const functions = require("firebase-functions");
 const {firestore} = require('firebase-admin');
 
+const {sendNotification} = require('./expoNotifications.js');
+
 const exclams = ['Wow! ', 'Incredible! ', 'Amazing! ', 'Unbelievable! ', 'Spectacular! '];
 
 module.exports = {
@@ -27,50 +29,59 @@ module.exports = {
             if (quantity > Math.floor(max * 1.25)) {
                 max = quantity;
                 let randomIndex = Math.floor(Math.random() * exclams.length);
+                let fact = `${exclams[randomIndex]}One of your recent posts has achieved ${quantity} comments! Keep it up!`;
                 upcoming.push({
-                    fact: `${exclams[randomIndex]}One of your recent posts has achieved ${quantity} comments! Keep it up!`,
+                    fact,
                     id,
                     type,
-                    quantity
+                    quantity,
+                    timestamp: Date.now()
                 });
                 await document.update({
                     commentMax: max,
                     upcoming: upcoming
                 })
+                await impactFactNotification(user_id, fact);
             }
         } else if (type == 'reaction') {
             let max = response.reactionMax;
             if (quantity > Math.floor(max * 1.25)) {
                 max = quantity;
                 let randomIndex = Math.floor(Math.random() * exclams.length);
+                let fact = `${exclams[randomIndex]}One of your recent posts has achieved ${quantity} likes! Let's go!`;
                 upcoming.push({
-                    fact: `${exclams[randomIndex]}One of your recent posts has achieved ${quantity} likes! Let's go!`,
+                    fact,
                     id,
                     type,
-                    quantity
+                    quantity,
+                    timestamp: Date.now()
                 });
                 await document.update({
                     reactionMax: max,
                     upcoming: upcoming
                 })
+                await impactFactNotification(user_id, fact);
             }
         } else if (type == 'category') {
             let max = response.categoryMax;
             if (quantity > Math.floor(max * 1.25)) {
                 max = quantity;
                 let randomIndex = Math.floor(Math.random() * exclams.length);
+                let fact = `${exclams[randomIndex]}You have achieved ${quantity} points in ${tag} - ${category}! Choo choo!`;
                 upcoming.push({
-                    fact: `${exclams[randomIndex]}You have achieved ${quantity} points in ${tag} - ${category}! Choo choo!`,
+                    fact,
                     id,
                     type,
                     quantity,
                     tag,
-                    category
+                    category,
+                    timestamp: Date.now()
                 });
                 await document.update({
                     categoryMax: max,
                     upcoming: upcoming
                 })
+                await impactFactNotification(user_id, fact);
             }
         }
     },
@@ -99,4 +110,8 @@ module.exports = {
             return res.status(500).send(error);
         }
     },
+}
+
+async function impactFactNotification(userid, body) {
+    await sendNotification(userid, 'New impact fact!', body);
 }

@@ -423,4 +423,17 @@ app.delete("/api/impact-facts-clear/:user_id", (req, res) => {
   clearUpcomingFacts(req, res, db);
 });
 
+// EXPO NOTIFICATIONS
+const {checkAllActive, updateActive} = require('./src/expoNotifications');
+
+// CHECK ALL ACTIVE
+app.get("/api/notifications-check-active/", (req, res) => {
+  checkAllActive(req, res, db);
+});
+
+// UPDATE ACTIVE
+app.put("/api/notifications-update-active/:user_id", (req, res) => {
+  updateActive(req, res, db);
+});
+
 exports.app = functions.https.onRequest(app);

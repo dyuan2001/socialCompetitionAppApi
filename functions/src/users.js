@@ -1,5 +1,6 @@
 const {firestore} = require('firebase-admin')
 const {addImpactFact} = require('./impactFacts.js');
+const {sendNotification} = require('./expoNotifications.js');
 
 module.exports = {
     postUser: async (req, res, db) => {
@@ -117,6 +118,12 @@ module.exports = {
             await document.update({
                 friends: firestore.FieldValue.arrayUnion(req.params.friend_id),
             });
+            let item = await document.get();
+            let userData = item.data();
+            if (userData.friends.length <= 20) {
+                await sendNotification(friend_id, 'New follower!', 
+                `${userData.username} is now following you. Consider following them back!`);
+            }
             return res.status(200).send();
         } catch (error) {
             console.log(error);
@@ -237,6 +244,17 @@ module.exports = {
             await document.update({
                 milestones: firestore.FieldValue.arrayRemove(milestone_id),
             });
+        } catch (error) {
+            console.log(error);
+        }
+    },
+
+    getExpoToken: async (user_id, db) => { // NOT API
+        try {
+            const document = db.collection('users').doc(user_id);
+            let item = await document.get();
+            let response = item.data().expoToken;
+            return response;
         } catch (error) {
             console.log(error);
         }

@@ -4,6 +4,7 @@ const XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 const {getUser, addUserpost} = require('./users.js');
 const {addImpactFact} = require('./impactFacts.js');
+const {sendNotification} = require('./expoNotifications.js');
 
 module.exports = {
     postUserpost: async (req, res, db) => {
@@ -148,6 +149,11 @@ module.exports = {
                 let user_id = response.userid;
                 let numComments = response.comments.length;
                 await addImpactFact(user_id, userpost_id, 'comment', numComments, null, null, db);
+
+                if (numComments == 1 && Date.now() - response.timestamp <= 604800 * 10^3) {
+                    await sendNotification(user_id, 'First comment on your new post!',
+                        'One of your recent posts has received its first comment. Login to Solu to see it!');
+                }
             } catch (error) {
                 console.log(error);
             }

@@ -1,7 +1,8 @@
 const functions = require("firebase-functions");
 const {firestore} = require('firebase-admin');
 const { updateComment } = require("./comments");
-const {addChallenge} = require('./users.js');
+const { addChallenge } = require('./users.js');
+const {sendMassNotification} = require('./expoNotifications.js');
 
 module.exports = {
     postChallenge: async (req, res, db) => {
@@ -22,6 +23,9 @@ module.exports = {
                     goal: body.goal,
                     current: true // specifies if it is active
                 })
+
+            await sendMassNotification('New monthly challenge starting now!', 
+                'Login to find out what this month\'s new challenge is!');
 
             return res.status(200).send({
                 currChallenge
