@@ -64,6 +64,7 @@ module.exports = {
 
             if (!Expo.isExpoPushToken(response.expoToken)) {
                 console.error(`Push token ${doc.data().expoToken} is not a valid Expo push token`);
+            } else {
                 let messages = [];
                 
                 messages.push({
@@ -74,8 +75,6 @@ module.exports = {
 
                 let chunks = expo.chunkPushNotifications(messages);
                 let tickets = await sendExpoNotifications(chunks);
-            } else {
-                throw new Error("Expo token was not valid.");
             }
         } catch (error) {
             console.log(error);
