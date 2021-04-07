@@ -152,7 +152,7 @@ module.exports = {
 
                 if (numComments == 1 && Date.now() - response.timestamp <= 604800 * 10^3) {
                     await sendNotification(user_id, 'First comment on your new post!',
-                        'One of your recent posts has received its first comment. Login to Solu to see it!');
+                        'One of your recent posts has received its first comment. Login to Solu to see it!', db);
                 }
             } catch (error) {
                 console.log(error);

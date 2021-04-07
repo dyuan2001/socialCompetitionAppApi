@@ -122,7 +122,7 @@ module.exports = {
             let userData = item.data();
             if (userData.friends.length <= 20) {
                 await sendNotification(friend_id, 'New follower!', 
-                `${userData.username} is now following you. Consider following them back!`);
+                `${userData.username} is now following you. Consider following them back!`, db);
             }
             return res.status(200).send();
         } catch (error) {

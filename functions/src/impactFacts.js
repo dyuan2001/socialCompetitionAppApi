@@ -41,7 +41,7 @@ module.exports = {
                     commentMax: max,
                     upcoming: upcoming
                 })
-                await impactFactNotification(user_id, fact);
+                await impactFactNotification(user_id, fact, db);
             }
         } else if (type == 'reaction') {
             let max = response.reactionMax;
@@ -60,7 +60,7 @@ module.exports = {
                     reactionMax: max,
                     upcoming: upcoming
                 })
-                await impactFactNotification(user_id, fact);
+                await impactFactNotification(user_id, fact, db);
             }
         } else if (type == 'category') {
             let max = response.categoryMax;
@@ -81,7 +81,7 @@ module.exports = {
                     categoryMax: max,
                     upcoming: upcoming
                 })
-                await impactFactNotification(user_id, fact);
+                await impactFactNotification(user_id, fact, db);
             }
         }
     },
@@ -112,6 +112,6 @@ module.exports = {
     },
 }
 
-async function impactFactNotification(userid, body) {
-    await sendNotification(userid, 'New impact fact!', body);
+async function impactFactNotification(userid, body, db) {
+    await sendNotification(userid, 'New impact fact!', body, db);
 }

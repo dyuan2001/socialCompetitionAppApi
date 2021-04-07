@@ -25,7 +25,7 @@ module.exports = {
                 })
 
             await sendMassNotification('New monthly challenge starting now!', 
-                'Login to find out what this month\'s new challenge is!');
+                'Login to find out what this month\'s new challenge is!', db);
 
             return res.status(200).send({
                 currChallenge

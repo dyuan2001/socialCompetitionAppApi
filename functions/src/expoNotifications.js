@@ -77,10 +77,8 @@ module.exports = {
             } else {
                 throw new Error("Expo token was not valid.");
             }
-            return res.status(200).send();
         } catch (error) {
             console.log(error);
-            return res.status(500).send(error);
         }
     },
 
