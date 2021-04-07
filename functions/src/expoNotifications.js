@@ -11,7 +11,7 @@ module.exports = {
                 let docs = querySnapshot.docs;
                 for (let doc of docs) {
                     if (typeof doc.data().lastActive == "undefined") {
-                        await db.collection('users').doc(doc.data().id)
+                        await db.collection('users').doc(doc.id)
                         .update({
                             lastActive: Date.now()
                         })
@@ -24,7 +24,7 @@ module.exports = {
                                 title: 'We\'ve missed you!',
                                 body: 'You\'ve been inactive for a while. Let\'s continue creating change with Solu!',
                             });
-                            await db.collection('users').doc(doc.data().id)
+                            await db.collection('users').doc(doc.id)
                             .update({
                                 lastActive: Date.now()
                             })
