@@ -15,7 +15,7 @@ module.exports = {
                         .update({
                             lastActive: Date.now()
                         })
-                    } else if (Date.now() - doc.data().lastActive > 604800 * 10^3) { // 1 week in milliseconds
+                    } else if (Date.now() - doc.data().lastActive > 604800 * tenCubed) { // 1 week in milliseconds
                         if (!Expo.isExpoPushToken(doc.data().expoToken)) {
                             console.error(`Push token ${doc.data().expoToken} is not a valid Expo push token`);
                         } else {
@@ -131,3 +131,5 @@ async function sendExpoNotifications(chunks) {
     }
     return tickets;
 }
+
+const tenCubed = Math.pow(10, 3);
